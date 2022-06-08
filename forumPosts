@@ -1,0 +1,83 @@
+window.addEventListener("load", solve);
+
+function solve() {
+
+  let title = document.getElementById('post-title')
+  let category = document.getElementById('post-category')
+  let content = document.getElementById('post-content')
+  let ulEl = document.getElementById('review-list')
+
+  document.getElementById('publish-btn').addEventListener('click', publish)
+  document.getElementById('clear-btn').addEventListener('click', clear)
+
+  function publish() {
+
+    if (valid(title.value) && valid(category.value) && valid(content.value)) {
+
+      let li = document.createElement('li')
+      li.className = 'rpost'
+      let artEl = document.createElement('article')
+      li.appendChild(artEl)
+
+      let h4El = document.createElement('h4')
+      h4El.textContent = title.value
+      artEl.appendChild(h4El)
+
+      let pEl = document.createElement('p')
+      pEl.textContent = `Category: ${category.value}`
+      artEl.appendChild(pEl)
+
+      let pEl2 = document.createElement('p')
+      pEl2.textContent = `Content: ${content.value}`
+      artEl.appendChild(pEl2)
+
+      let btnEdit = document.createElement('button')
+      btnEdit.className = 'action-btn edit'
+      btnEdit.textContent = 'Edit'
+      li.appendChild(btnEdit)
+      btnEdit.addEventListener('click', edit)
+
+      let btnApprove = document.createElement('button')
+      btnApprove.className = 'action-btn approve'
+      btnApprove.textContent = 'Approve'
+      li.appendChild(btnApprove)
+      btnApprove.addEventListener('click', approve)
+
+      ulEl.appendChild(li)
+
+      title.value = ''
+      category.value = ''
+      content.value = ''
+    }
+  }
+  function valid(ind) {
+    return ind.length > 0
+  }
+  function edit() {
+    let li = document.querySelector('.rpost')
+    let h4El = document.getElementsByTagName('h4')[0]
+    let pEl = document.querySelector('article p')
+    let pEl2 = document.querySelector('article p:nth-child(3)')
+
+    title.value = h4El.textContent
+    category.value = pEl.textContent.split('Category: ')[1]
+    content.value = pEl2.textContent.split('Content: ')[1]
+
+    ulEl.removeChild(li)
+  }
+  function approve() {
+
+    let publList = document.getElementById('published-list')
+    let liEl = document.querySelector('.rpost')
+    let [editBtn, approveBtn] = document.querySelectorAll('.rpost button')
+
+    publList.appendChild(liEl)
+    liEl.removeChild(editBtn)
+    liEl.removeChild(approveBtn)
+  }
+  function clear() {
+    let publList = document.getElementById('published-list')
+    let parent = Array.from(publList.children)
+    parent.forEach((el) => publList.removeChild(el))
+  }
+}
