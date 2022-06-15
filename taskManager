@@ -1,0 +1,131 @@
+function solve() {
+
+    document.getElementById('add').addEventListener('click', addList)
+    document.getElementById('reset').addEventListener('click', onReset)
+
+    let reccipient = document.getElementById('recipientName')
+    let title = document.getElementById('title')
+    let message = document.getElementById('message')
+
+    let ulEl = document.getElementById('list')
+    let ulE = document.getElementsByClassName('sent-list')[0]
+    let ul = document.getElementsByClassName('delete-list')[0]
+
+    function addList(ev) {
+        ev.preventDefault()
+        //if (reccipient.value.length !== 0 && title.value.length !== 0 && message.value.length !== 0) {
+        if (reccipient.value !== '' && title.value !== '' && message.value !== '') {
+            let liEl = document.createElement('li')
+
+            let h4 = document.createElement('h4')
+            h4.textContent = 'Title: ' + title.value
+            liEl.appendChild(h4)
+
+            let H4 = document.createElement('h4')
+            H4.textContent = `Recipient Name: ` + reccipient.value
+            liEl.appendChild(H4)
+
+            let spanEl = document.createElement('span')
+            spanEl.textContent = message.value
+            liEl.appendChild(spanEl)
+
+            let btnSend = document.createElement('button')
+            btnSend.textContent = 'Send'
+            btnSend.type = 'submit'
+            btnSend.id = 'send'
+
+            let btnDelete = document.createElement('button')
+            btnDelete.textContent = 'Delete'
+            btnDelete.id = 'delete'
+            btnDelete.type = 'submit'
+
+
+            let divEl = document.createElement('div')
+            divEl.id = 'list-action'
+            divEl.appendChild(btnSend)
+            divEl.appendChild(btnDelete)
+
+            liEl.appendChild(divEl)
+
+            ulEl.appendChild(liEl)
+
+            btnSend.addEventListener('click', onSend)
+            btnDelete.addEventListener('click', onDelete)// pyrviq delete button
+
+            reccipient.value = ''
+            title.value = ''
+            message.value = ''
+        }
+    }
+    function onSend(e) {
+        e.preventDefault()
+        let liE = document.createElement('li')
+        let span = document.createElement('span')
+        let recip = document.querySelectorAll('h4')[0]
+
+        span.textContent = `To: ` + recip.textContent.split(': ')[1]
+        // span.textContent = 'To: ' + reccipient.value
+        liE.appendChild(span)
+
+        let span2 = document.createElement('span')
+        let contentTitle = document.querySelectorAll('h4')[1]
+        span2.textContent = `Title: ` + contentTitle.textContent.split(': ')[1]
+        //span2.textContent = `Title: ` + contentTitle
+        liE.appendChild(span2)
+
+        let div = document.createElement('div')
+        div.className = 'btn'
+
+        let btnDel = document.createElement('button')
+        btnDel.type = 'submit'
+        btnDel.className = 'delete'
+        btnDel.textContent = 'Delete'
+        div.appendChild(btnDel)
+
+        liE.appendChild(div)
+        ulE.appendChild(liE)
+        ulE.appendChild(liE)
+        e.target.parentNode.parentNode.remove()
+         //ulEl.remove(liEl)
+
+        btnDel.addEventListener('click', onDeleteFromSend) // vtoriq delete button
+
+
+    }
+    function onDelete(e) {
+        e.preventDefault()
+        let li = document.createElement('li')
+        let span = document.createElement('span')
+        let recV = e.target.parentNode.parentNode.children[0].textContent.split(': ')[1]
+        
+        span.textContent = `To: ${recV}`
+        li.appendChild(span)
+
+        let span2 = document.createElement('span')
+        let titleV = e.target.parentNode.parentNode.children[1].textContent.split(': ')[1]
+        span2.textContent = `Title: ` + titleV
+        li.appendChild(span2)
+
+        ul.appendChild(li) 
+        e.target.parentNode.parentNode.remove()
+
+    }
+    function onDeleteFromSend(e) {
+        e.preventDefault()
+       // let final = e.target.parentNode.parentNode.children[0].textContent.split(': ')[1]
+        let final=e.target.parentNode.parentNode
+
+        final.children[2].remove() 
+        
+        ul.appendChild(final)
+        
+    }
+
+    function onReset(e) {
+        e.preventDefault()
+        reccipient.value = ''
+        title.value = ''
+        message.value = ''
+    }
+}
+solve()
