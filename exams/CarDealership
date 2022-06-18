@@ -1,0 +1,88 @@
+class CarDealership {
+
+    constructor(name) {
+        this.name = name,
+            this.availableCars = [],
+            this.soldCars = [],
+            this.totalIncome = 0
+    }
+    addCar(model, horsepower, price, mileage) {
+        if (model ==='' || horsepower < 0 || horsepower % 2 !== 0 || price < 0 || mileage < 0) {
+            throw new Error('Invalid input!')
+        }
+        else {
+            let car = {
+                model,
+                horsepower,
+                price,
+                mileage
+            }
+            this.availableCars.push(car)
+            return `New car added: ${model} - ${horsepower} HP - ${mileage.toFixed(2)} km - ${price.toFixed(2)}$`
+        }
+    }
+    sellCar(model, desiredMileage) {
+        let founded = this.availableCars.find(x => x.model === model)
+
+        if (founded=== undefined) {
+            throw new Error(`${model} was not found!`)
+        } 
+        else {
+           // let soldPrice = 0
+            if (founded.mileage <= desiredMileage) {
+                founded.price = founded.price
+            } else if (founded.mileage - desiredMileage <= 40000) {
+                founded.price *= 0.95
+            }
+            else {
+                founded.price *=0.9
+            }
+            
+            //this.soldCars.push(`${founded.model} ${founded.horsepower} ${soldPrice}`)
+            this.soldCars.push({model: founded.model, horsepower: founded.horsepower, soldPrice: founded.price})
+            
+            this.availableCars = this.availableCars.filter(x => x.car !== founded)
+            this.totalIncome += founded.price
+            return `${model} was sold for ${founded.price.toFixed(2)}$`
+        }
+    }
+    currentCar() {
+
+        if (this.availableCars.length > 0) {
+            let result = []
+            result.push(`-Available cars:`)
+            this.availableCars.forEach(x => result.push(`---${x.model} - ${x.horsepower} HP - ${x.mileage.toFixed(2)} km - ${x.price.toFixed(2)}$`))
+
+            return result.join('\n')
+
+        } else {
+            return `There are no available cars`
+        }
+    }
+    salesReport(criteria) {
+
+        if (criteria === 'horsepower') {
+            this.soldCars.sort((a, b) => b.horsepower - a.horsepower)
+        }
+        else if (criteria === 'model') {
+            this.soldCars.sort((a, b) => a.model.localeCompare(b.model))
+        }
+        else {
+            throw new Error('Invalid criteria!')
+        }
+        let allCars=[]
+        allCars.push(`-${this.name} has a total income of ${this.totalIncome.toFixed(2)}$`)
+        allCars.push(`-${this.soldCars.length} cars sold:`)
+       // console.log(this.soldCars[1]);
+        
+        this.soldCars.forEach(x=> allCars.push(`---${x.model} - ${x.horsepower} HP - ${x.soldPrice.toFixed(2)}$`))
+        return allCars.join('\n')
+    }
+}
+let dealership = new CarDealership('SoftAuto');
+dealership.addCar('Toyota Corolla', 100, 3500, 190000);
+dealership.addCar('Mercedes C63', 300, 29000, 187000);
+dealership.addCar('Audi A3', 120, 4900, 240000);
+dealership.sellCar('Toyota Corolla', 230000);
+dealership.sellCar('Mercedes C63', 110000);
+console.log(dealership.salesReport('horsepower'));
