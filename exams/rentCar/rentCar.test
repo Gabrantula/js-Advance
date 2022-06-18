@@ -1,0 +1,46 @@
+let { expect }=require('chai')
+let { rentCar }=require('./rentCar')
+
+describe('Rent car',()=>{
+
+    describe('search',()=>{
+
+        it('model in the shop',()=>{
+            expect(rentCar.searchCar(['BMW'],'BMW')).to.deep.equal(`There is 1 car of model BMW in the catalog!`)
+        })
+        it('valid input',()=>{
+            expect(()=>rentCar.searchCar('[]','')).to.throw('Invalid input!')
+            expect(()=>rentCar.searchCar([],2)).to.throw('Invalid input!')  
+        })
+        it('no mach',()=>{
+            expect(()=>rentCar.searchCar(['Lada'],'Peugeot')).to.throw('There are no such models in the catalog!')
+        })
+    })
+    describe('calc',()=>{
+
+        it('invalid input',()=>{
+            expect(()=>rentCar.calculatePriceOfCar(1,1)).to.throw('Invalid input!')
+            expect(()=>rentCar.calculatePriceOfCar('1','1')).to.throw('Invalid input!')
+        })
+        it('price for rent',()=>{
+            expect(rentCar.calculatePriceOfCar('BMW',3)).to.equal(`You choose BMW and it will cost $135!`)
+        })
+        it('no model',()=>{
+            expect(()=>rentCar.calculatePriceOfCar('Hummer',2)).to.throw('No such model in the catalog!')
+        })
+    })
+    describe('check',()=>{
+
+        it('invalid input',()=>{
+           expect(()=>rentCar.checkBudget('1',1,1)).to.throw('Invalid input!')
+           expect(()=>rentCar.checkBudget(1,'1',1)).to.throw('Invalid input!')
+           expect(()=>rentCar.checkBudget(1,1,'1')).to.throw('Invalid input!')
+        })
+        it('you rent a car',()=>{
+            expect(rentCar.checkBudget(200,3,600)).to.equal('You rent a car!')
+        })
+        it('no enough money',()=>{
+            expect(rentCar.checkBudget(200,3,550)).to.equal('You need a bigger budget!')
+        })
+    })
+})
