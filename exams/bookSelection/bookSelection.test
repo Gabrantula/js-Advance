@@ -1,0 +1,33 @@
+let { expect }=require('chai')
+let { bookSelection }=require('./bookSec')
+
+describe('Book selection', ()=>{
+    it('not for kids',()=>{
+        expect(bookSelection.isGenreSuitable('Thriller',12)).to.equal(`Books with Thriller genre are not suitable for kids at 12 age`)
+        expect(bookSelection.isGenreSuitable('Horror',11)).to.equal('Books with Horror genre are not suitable for kids at 11 age')
+    })
+    it('is ok for kids',()=>{
+        expect(bookSelection.isGenreSuitable('Comedy',11)).to.equal('Those books are suitable')
+        expect(bookSelection.isGenreSuitable('Thriller',13)).to.equal('Those books are suitable')
+    })
+    describe('Afforable',()=>{
+     it('not enough money',()=>{
+         expect(bookSelection.isItAffordable(10,8)).to.equal(`You don't have enough money`)
+     })
+     it('book bought',()=>{
+         expect(bookSelection.isItAffordable(8,10)).to.equal('Book bought. You have 2$ left')
+     })
+     it('invalid input',()=>{
+         expect(()=>bookSelection.isItAffordable('1',1)).to.throw('Invalid input')
+         expect(()=>bookSelection.isItAffordable(1,'1')).to.throw('Invalid input')
+     })
+    })
+    describe('suitable Titles',()=>{
+       it('array',()=>{
+           expect(bookSelection.suitableTitles([{title: "The Da Vinci Code",genre: "Thriller"}], 'Thriller')).to.deep.equal(['The Da Vinci Code'])
+       })
+       it('array',()=>{
+           expect(()=>bookSelection.suitableTitles('[]',0)).to.throw('Invalid input')
+       })
+    })
+})
