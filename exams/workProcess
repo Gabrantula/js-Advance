@@ -1,0 +1,87 @@
+function solve() {
+
+    let fName = document.getElementById('fname')
+    let lName = document.getElementById('lname')
+    let email = document.getElementById('email')
+    let birthDate = document.getElementById('birth')
+    let position = document.getElementById('position')
+    let salary = document.getElementById('salary')
+
+    let tBodyTag = document.getElementById('tbody')
+    let budget = document.getElementById('sum')
+
+    let workerBtn = document.getElementById('add-worker').addEventListener('click', onclick)
+
+    function onclick(e) {
+        e.preventDefault()
+        if (fName.value !== '' && lName.value !== '' && email.value !== '' && birthDate.value !== '' && position.value !== '' && salary.value !== '') {
+            let salarY = 0
+            let trEl = document.createElement('tr')
+
+            let td1 = document.createElement('td')
+            td1.textContent = fName.value
+            trEl.appendChild(td1)
+
+            let td2 = document.createElement('td')
+            td2.textContent = lName.value
+            trEl.appendChild(td2)
+
+            let td3 = document.createElement('td')
+            td3.textContent = email.value
+            trEl.appendChild(td3)
+
+            let td4 = document.createElement('td')
+            td4.textContent = birthDate.value
+            trEl.appendChild(td4)
+
+            let td5 = document.createElement('td')
+            td5.textContent = position.value
+            trEl.appendChild(td5)
+
+            let td6 = document.createElement('td')
+            td6.textContent = salary.value
+            trEl.appendChild(td6)
+            salarY += Number(td6.textContent)
+
+            let tdBtns = document.createElement('td')
+
+            let btnFired = document.createElement('button')
+            btnFired.className = 'fired'
+            btnFired.textContent = 'Fired'
+            tdBtns.appendChild(btnFired)
+
+            let btnEdit = document.createElement('button')
+            btnEdit.className = 'edit'
+            btnEdit.textContent = 'Edit'
+            tdBtns.appendChild(btnEdit)
+
+            trEl.appendChild(tdBtns)
+
+            tBodyTag.appendChild(trEl)
+
+            fName.value = ''
+            lName.value = ''
+            email.value = ''
+            birthDate.value = ''
+            position.value = ''
+            salary.value = ''
+
+            budget.textContent = (Number(budget.textContent) + salarY).toFixed(2)
+
+            btnEdit.addEventListener('click', (e) => {
+                fName.value = td1.textContent
+                lName.value = td2.textContent
+                email.value = td3.textContent
+                birthDate.value = td4.textContent
+                position.value = td5.textContent
+                salary.value = td6.textContent
+                budget.textContent = (Number(budget.textContent) - salarY).toFixed(2)
+                trEl.remove()
+            })
+            btnFired.addEventListener('click',(e)=>{
+                budget.textContent = (Number(budget.textContent) - salarY).toFixed(2)
+                trEl.remove()
+            })
+        }
+    }
+}
