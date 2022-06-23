@@ -1,0 +1,52 @@
+let { expect } = require('chai')
+let { companyAdministration } = require('./companyAdmin')
+
+describe('company Administrator', () => {
+
+    describe('hiring ', () => {
+
+        it('is not programmer', () => {
+            expect(() => companyAdministration.hiringEmployee('Az', 'Singer', 3)).to.throw('We are not looking for workers for this position.')
+        })
+        it('experience', () => {
+            expect(companyAdministration.hiringEmployee('az', 'Programmer', 3)).to.equal('az was successfully hired for the position Programmer.')
+            expect(companyAdministration.hiringEmployee('az', 'Programmer', 5)).to.equal('az was successfully hired for the position Programmer.')
+            expect(companyAdministration.hiringEmployee('az', 'Programmer', 2)).to.equal('az is not approved for this position.')
+        })
+        
+    })
+    describe('calculate', () => {
+        it('salary',()=>{
+            expect(companyAdministration.calculateSalary(5)).to.equal(75)
+        })
+        it('more than 160 hours',()=>{
+            expect(companyAdministration.calculateSalary(161)).to.equal(3415)
+        })
+        it('invalid input',()=>{
+            expect(()=>companyAdministration.calculateSalary('1')).to.throw('Invalid hours')
+            expect(()=>companyAdministration.calculateSalary(-1)).to.throw('Invalid hours')
+        })
+    })
+    describe('fired ', () => {
+
+        it('invalid first param',()=>{
+            expect(()=>companyAdministration.firedEmployee('[]',2)).to.throw('Invalid input')
+           
+            
+        })
+        it('nevalid second param',()=>{
+            expect(()=>companyAdministration.firedEmployee([],2.5)).to.throw('Invalid input')
+            expect(()=>companyAdministration.firedEmployee([],-2)).to.throw('Invalid input')
+            expect(()=>companyAdministration.firedEmployee([],'2')).to.throw('Invalid input')
+           
+        })
+        it('second param is difrent from the length',()=>{
+            expect(()=>companyAdministration.firedEmployee(['a','b','v'],4)).to.throw('Invalid input')
+            expect(()=>companyAdministration.firedEmployee(['a','b','v'],-1)).to.throw('Invalid input')
+            expect(()=>companyAdministration.firedEmployee(['a','b','v'],'1')).to.throw('Invalid input')
+        })
+        it('remove element',()=>{
+            expect(companyAdministration.firedEmployee(['a','b','v'],2)).to.equal('a, b')
+        })
+    })
+})
