@@ -1,0 +1,50 @@
+let { expect }=require('chai')
+let { carService }=require('./carServicE')
+
+describe('car service',()=>{
+
+    describe('expensive',()=>{
+
+        it('engine or transmission',()=>{
+            expect(carService.isItExpensive('Engine')).to.equal('The issue with the car is more severe and it will cost more money')
+            expect(carService.isItExpensive('Transmission')).to.equal('The issue with the car is more severe and it will cost more money')
+        })
+        it('another',()=>{
+            expect(carService.isItExpensive('alabala')).to.equal(`The overall price will be a bit cheaper`)
+        })
+    })
+    describe('discount',()=>{
+
+        it('15%',()=>{
+            expect(carService.discount(3,10)).to.equal('Discount applied! You saved 1.5$')
+            expect(carService.discount(7,10)).to.equal('Discount applied! You saved 1.5$')
+        })
+        it('30%',()=>{
+            expect(carService.discount(10,10)).to.equal('Discount applied! You saved 3$')
+        })
+        it('smaller or equal to 2',()=>{
+            expect(carService.discount(2,10)).to.equal(`You cannot apply a discount`)
+            expect(carService.discount(1,10)).to.equal(`You cannot apply a discount`)
+        })
+        it('invalid input',()=>{
+            expect(()=>carService.discount('1','2')).to.throw('Invalid input')
+            expect(()=>carService.discount(1,'2')).to.throw('Invalid input')
+            expect(()=>carService.discount('1',2)).to.throw('Invalid input')
+        })
+    })
+    describe('to buy',()=>{
+
+        it('invalid input',()=>{
+            expect(()=>carService.partsToBuy('[]','[]')).to.throw('Invalid input')
+            expect(()=>carService.partsToBuy([],'[]')).to.throw('Invalid input')
+            expect(()=>carService.partsToBuy('[]',[])).to.throw('Invalid input')
+        })
+        it('zero length',()=>{
+            expect(carService.partsToBuy([],[])).to.equal(0)
+        })
+        it('calc',()=>{
+                expect(carService.partsToBuy([{part:"blowoff valve",price:145 },{ part:"coil springs",price:230 }],["blowoff valve"])).to.equal(145);
+                expect(carService.partsToBuy([],[])).to.equal(0)
+        })
+    })
+})
